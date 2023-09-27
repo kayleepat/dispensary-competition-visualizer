@@ -1,5 +1,6 @@
 from sqlalchemy import create_engine
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify
+from flask_cors import CORS
 
 
 # from pathlib import Path
@@ -15,9 +16,19 @@ engine = create_engine("sqlite:///mmtc_dispensaries.sqlite")
 # Flask Setup
 ################################################
 app = Flask(__name__)
+CORS(app)
+
 
 @app.route("/")
-def index():
+def welcome():
+    """List all available api routes."""
+    return (
+        f"Available Routes:<br/>"
+        f"/api/v1.0/locations<br/>"
+    )
+
+@app.route("/api/v1.0/locations")
+def locations():
     with engine.connect() as conn:
         result = conn.execute('SELECT * FROM geolocated_dispensaries')
 
