@@ -1,11 +1,4 @@
-import sqlalchemy
-from sqlalchemy.ext.automap import automap_base
-from sqlalchemy.orm import Session
 from sqlalchemy import create_engine
-import numpy as np
-import sqlite3
-from pathlib import Path
-import pandas as pd
 from flask import Flask, jsonify, render_template
 
 
