@@ -1,4 +1,4 @@
-,COMPANY,ADDRESS,CITY,ZIP CODE,COUNTY,Phone,Email,Authorization Status,License Number,Full Address,Latitude,Longitude
+,company,street_address,city,zip_code,county,phone_number,email_address,authorization_status,license_number,full_address,latitude,longitude
 0,Ayr Cannabis Dispensary,6325 N Orange Blossom Trail,Orlando,32810,Orange,833-254-4877,Info@libertyhealthsciences.com,Dispensing Authorization,MMTC-2015-0002,"6325 N Orange Blossom Trail, Orlando, FL 32810",28.613140672712017,-81.43263221505724
 1,Ayr Cannabis Dispensary,7390 Aloma Avenue,Winter Park,32792,Orange,833-254-4877,Info@libertyhealthsciences.com,Dispensing Authorization,MMTC-2015-0002,"7390 Aloma Avenue, Winter Park, FL 32792",28.60856,-81.28971
 2,Ayr Cannabis Dispensary,4650 N Alafaya Trail,Orlando,32826,Orange,833-254-4877,Info@libertyhealthsciences.com,Dispensing Authorization,MMTC-2015-0002,"4650 N Alafaya Trail, Orlando, FL 32826",28.607891,-81.208217
@@ -40,7 +40,7 @@
 38,Ayr Cannabis Dispensary,1222 S 3rd Street,Jacksonville Beach,32250,Duval,833-254-4877,Info@libertyhealthsciences.com,Dispensing Authorization,MMTC-2015-0002,"1222 S 3rd Street, Jacksonville Beach, FL 32250",30.276436,-81.390018
 39,Ayr Cannabis Dispensary,3323 SE Federal Highway,Stuart,32997,Martin,833-254-4877,Info@libertyhealthsciences.com,Dispensing Authorization,MMTC-2015-0002,"3323 SE Federal Highway, Stuart, FL 32997",27.16276535121053,-80.22489571346895
 40,Ayr Cannabis Dispensary,1540 Palm Beach Lakes Boulevard,West Palm Beach,33401,Palm Beach,833-254-4877,Info@libertyhealthsciences.com,Dispensing Authorization,MMTC-2015-0002,"1540 Palm Beach Lakes Boulevard, West Palm Beach, FL 33401",26.724892285714287,-80.07621873469388
-41,Ayr Cannabis Dispensary,6990 Florida Avenue S,Lakeland,33813,Polk,833-254-4877,Info@libertyhealthsciences.com,Dispensing Authorization,MMTC-2015-0002,"6990 Florida Avenue S, Lakeland, FL 33813",27.938856,-81.973228
+41,Ayr Cannabis Dispensary,6990 Florida Avenue S,Lakeland,33813,Polk,833-254-4877,Info@libertyhealthsciences.com,Dispensing Authorization,MMTC-2015-0002,"6990 Florida Avenue S, Lakeland, FL 33813",,
 42,Ayr Cannabis Dispensary,1475 Cortez Road,Bradenton,34207,Manatee,833-254-4877,Info@libertyhealthsciences.com,Dispensing Authorization,MMTC-2015-0002,"1475 Cortez Road, Bradenton, FL 34207",27.46226,-82.57631
 43,Ayr Cannabis Dispensary,9815 S Orange Blossom Trail,Orlando,32837,Orange,833-254-4877,Info@libertyhealthsciences.com,Dispensing Authorization,MMTC-2015-0002,"9815 S Orange Blossom Trail, Orlando, FL 32837",28.41369438790832,-81.404836
 44,Ayr Cannabis Dispensary,2067 Siesta Drive,Sarasota,34239,Sarasota,833-254-4877,Info@libertyhealthsciences.com,Dispensing Authorization,MMTC-2015-0002,"2067 Siesta Drive, Sarasota, FL 34239",27.302932595141893,-82.52846926489838
