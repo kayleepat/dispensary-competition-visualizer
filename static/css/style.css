@@ -8,4 +8,7 @@ body {
   html {
     height: 100%;
   }
+
+  #map { height: 800px;
+    width: 800px }
   
