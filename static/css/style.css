@@ -4,14 +4,6 @@
   flex-direction: row;
   justify-content: center;
   width: 100%;
-  height: 100%;
-}
-
-html, body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
 }
 
 .desktop .overlap-wrapper {
@@ -124,6 +116,7 @@ html, body {
 .desktop .logo {
   position: relative;
   width: fit-content;
+  margin-top: -1px;
   font-family: "Roboto", Helvetica;
   font-weight: 700;
   color: #205072;
@@ -132,7 +125,7 @@ html, body {
   line-height: normal;
 }
 
-.desktop .links {
+.desktop .navbar {
   display: inline-flex;
   align-items: center;
   gap: 72px;
@@ -140,7 +133,18 @@ html, body {
   flex: 0 0 auto;
 }
 
-.desktop .link {
+.desktop .home {
+  position: relative;
+  width: fit-content;
+  font-family: "Roboto", Helvetica;
+  font-weight: 600;
+  color: #205072;
+  font-size: 18px;
+  letter-spacing: 0;
+  line-height: normal;
+}
+
+.desktop .text-wrapper {
   position: relative;
   width: fit-content;
   font-family: "Roboto", Helvetica;
@@ -149,30 +153,6 @@ html, body {
   font-size: 18px;
   letter-spacing: 0;
   line-height: normal;
-}
-
-a {
-  margin: 0 -.25rem;
-  padding: 0 .25rem;
-  transition: color .3s ease-in-out, box-shadow .3s ease-in-out;
-}
-
-a:visited {
-  color: #205072; /* stop link from changing color after it has been visited */
-}
-
-a:hover {
-  box-shadow: inset 100px 0 0 0 #205072;
-  color: white;
-}
-
-.desktop .button-secondary {
-  position: relative;
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  border: 1px solid;
-  border-color: #205072;
 }
 
 .desktop #map {
@@ -219,7 +199,7 @@ a:hover {
   overflow: hidden;
 }
 
-.desktop .text-wrapper {
+.desktop .text-wrapper-2 {
   position: relative;
   width: 77px;
   height: 23px;
@@ -234,7 +214,7 @@ a:hover {
   white-space: nowrap;
 }
 
-.desktop .text-wrapper-2 {
+.desktop .text-wrapper-3 {
   position: relative;
   width: 77px;
   height: 23px;
@@ -307,7 +287,7 @@ a:hover {
   box-shadow: -5px 7px 7px #9a9a9a40;
   backdrop-filter: blur(12px) brightness(100%);
   -webkit-backdrop-filter: blur(12px) brightness(100%);
-  background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.1));
+  background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.1));
 }
 
 .desktop .div-wrapper {
@@ -324,7 +304,7 @@ a:hover {
   /* background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.1)); */
 }
 
-.desktop .text-wrapper-3 {
+.desktop .text-wrapper-4 {
   position: absolute;
   height: 35px;
   top: 21px;
@@ -355,7 +335,7 @@ a:hover {
   border-color: #ffffff4c;
 }
 
-.desktop .text-wrapper-4 {
+.desktop .text-wrapper-5 {
   position: relative;
   width: fit-content;
   margin-top: -1px;
@@ -578,11 +558,26 @@ a:hover {
   background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.1));
 }
 
-.desktop .links-2 {
+.desktop .links {
   display: inline-flex;
   align-items: center;
   gap: 72px;
   position: relative;
   top: 17px;
-  left: 583px;
+  left: 522px;
+}
+
+a {
+  margin: 0 -.25rem;
+  padding: 0 .25rem;
+  transition: color .3s ease-in-out, box-shadow .3s ease-in-out;
+}
+
+a:visited {
+  color: #205072; /* stop link from changing color after it has been visited */
+}
+
+a:hover {
+  box-shadow: inset 100px 0 0 0 #205072;
+  color: white;
 }
