@@ -1,5 +1,5 @@
 from sqlalchemy import create_engine
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template
 from flask_cors import CORS
 import json
 
@@ -21,12 +21,8 @@ CORS(app)
 
 
 @app.route("/")
-def welcome():
-    """List all available api routes."""
-    return (
-        f"Available Routes:<br/>"
-        f"/api/v1.0/locations<br/>"
-    )
+def index():
+    return render_template("index.html")
 
 @app.route("/api/v1.0/locations")
 def locations():
