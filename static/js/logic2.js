@@ -1,5 +1,6 @@
 const url = "http://127.0.0.1:5000/api/v1.0/geoJSON"
 
+
 // confirm data import
 d3.json(url).then(data => {
     console.log(data)
@@ -8,25 +9,28 @@ d3.json(url).then(data => {
         console.log('Test')
     }
 
-    // function calcCrow(coords1, coords2) { //https://stackoverflow.com/questions/23115375/determine-if-a-longitude-latitude-co-ordinate-is-inside-a-radius-in-miles-and#28673693
-           
-    //     // var R = 6.371; // km
-    //     var R = 6371000;
-    //     var dLat = toRad(coords2.lat-coords1.lat);
-    //     var dLon = toRad(coords2.lng-coords1.lng);
-    //     var lat1 = toRad(coords1.lat);
-    //     var lat2 = toRad(coords2.lat);
+    // [-81.43263221505724, 28.613140672712017]
 
-    //     var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-    //         Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
-    //     var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
-    //     var d = R * c;
-    //     return d;
-    // }
 
-    function set_map_radius(radius = 25){
+    function distance_in_miles_between_earth_coords(lat1, lon1, lat2, lon2) {
+        var p = 0.017453292519943295;    // Math.PI / 180
+        var c = Math.cos;
+        var a = 0.5 - c((lat2 - lat1) * p)/2 + 
+                c(lat1 * p) * c(lat2 * p) * 
+                (1 - c((lon2 - lon1) * p))/2;
+      
+        return 12742 * Math.asin(Math.sqrt(a)) * 0.6213712
+      }
+
+    console.log(distance_in_miles_between_earth_coords(data.features[0].properties.latitude, data.features[0].properties.longitude, data.features[1].properties.latitude, data.features[1].properties.longitude))
+    // console.log(data.features[0].properties.latitude, data.features[1].properties.latitude)
+    // console.log(data.features[0].properties.longitude, data.features[1].properties.longitude) 
+
+
+    function set_map_radius(radius = 5){
         console.log(`radius = ${radius}`)
     }
+
 
     function plot_map(){
 
@@ -41,7 +45,6 @@ d3.json(url).then(data => {
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(map)
 
-
         add_data_to_map()
         console.log(data.features[0].properties.company)
         console.log('map code ran')
@@ -50,44 +53,71 @@ d3.json(url).then(data => {
 
     function add_data_to_map(){
 
-            L.geoJSON(data, {
-                pointToLayer: function(feature, coordinates){
+        var myStyle = {
+            "color": "#ff7800",
+            "weight": 5,
+            "opacity": 0.65
+        }
 
-                const color_value = function(feature) {
-                     switch(feature.properties.company) {
-                        case "Trulieve" : return {color: "#ff0000"}
-                        default: return {color: "#956ce0"}
-                    }
-                }
+        L.geoJSON(data, {
 
-                
-                const markerHtmlStyles = `background-color: ${color_value}`
+            pointToLayer: function(feature, coordinates) {
 
-                const customicon = L.divIcon({
-                    html: `<span style="${markerHtmlStyles}" />`
+            const color_value = 'red'
+            
+            const markerHtmlStyles = `background-color: ${color_value}`
 
-                // ,onEachFeature: function(feature, layer) {
+            const customicon = L.divIcon({
+                html: `<span style="${markerHtmlStyles}" />`
+            })
+            
+            return L.marker(coordinates, {
+                fillcolor: '#3388ff'
+                // ,icon:customicon
+            })
+
+            // ,onEachFeature: function(feature, layer) {
 
 
-                        
-                //     layer.on({
-                //         click: function(e) {
+                    
+            //     layer.on({
+            //         click: function(e) {
 
-                //             var marker = e.target
-                //             var latlng = marker.getLatLng()
-     
-                //             // processClick(latlng)
-                //         }
-                //     })
-                // }
-                }
+            //             var marker = e.target
+            //             var latlng = marker.getLatLng()
     
-            }).addTo(map)
+            //             // processClick(latlng)
+            //         }
+            //     })
+            // // }
+
+            }
+
+        }).addTo(map)
+
     }
 
-    function calculate_competitors_within_radius(dispensary, radius) {
+
+
+    function calculate_competitors_within_radius(lat_dispensary, lon_dispensary, radius) {
+
+        var competitors = 0
         
+        for (i = 0; i < data.features.length ; i++){
+            
+            distance_between_dispensaries = distance_in_miles_between_earth_coords(lat_dispensary, lon_dispensary, data.features[i].properties.latitude, data.features[i].properties.longitude)
+
+            if (distance_between_dispensaries <= radius) {
+                competitors = competitors + 1
+            }
+            
+        }
+
+        return competitors
+
     }
+
+    console.log(calculate_competitors_within_radius(data.features[0].properties.latitude, data.features[0].properties.longitude,5))
 
 
     function proccess_map_click() {
