@@ -24,15 +24,6 @@ CORS(app)
 def index():
     return render_template("index.html")
 
-@app.route("/api/v1.0/locations")
-def locations():
-    with engine.connect() as conn:
-        result = conn.execute('SELECT * FROM geolocated_dispensaries')
-
-        data = [dict(row) for row in result]   
-
-    return jsonify(data)
-
 @app.route("/api/v1.0/geoJSON")
 def geoJsonify():
     with engine.connect() as conn:
