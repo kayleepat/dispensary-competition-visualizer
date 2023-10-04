@@ -151,6 +151,21 @@ html, body {
   line-height: normal;
 }
 
+a {
+  margin: 0 -.25rem;
+  padding: 0 .25rem;
+  transition: color .3s ease-in-out, box-shadow .3s ease-in-out;
+}
+
+a:visited {
+  color: #205072; /* stop link from changing color after it has been visited */
+}
+
+a:hover {
+  box-shadow: inset 100px 0 0 0 #205072;
+  color: white;
+}
+
 .desktop .button-secondary {
   position: relative;
   width: 36px;
