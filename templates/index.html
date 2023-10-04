@@ -1,10 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-
+<html>
+  <head>
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
@@ -18,14 +14,183 @@
     <!-- D3 library -->
     <script src="https://d3js.org/d3.v7.min.js"></script>
 
-    <!-- Our CSS -->
-    <link rel="stylesheet" type="text/css" href="../static/css/style.css">
-</head>
-<body>
-    <!-- map div -->
-    <div id="map"></div>
-
+    <link rel="stylesheet" href="../static/css/globals.css" />
+    <link rel="stylesheet" href="../static/css/style.css" />
+  </head>
+  <body>
+    <div class="desktop">
+      <div class="overlap-wrapper">
+        <div class="overlap">
+          <div class="rectangle"></div>
+          <div class="ellipse"></div>
+          <div class="div"></div>
+          <div class="ellipse-2"></div>
+          <div class="ellipse-3"></div>
+          <div class="ellipse-4"></div>
+          <div class="ellipse-5"></div>
+          <div class="header-container">
+            <div class="logo">DISPENSARY COMPETITION VISUALIZER</div>
+            <div class="links">
+              <div class="link">About</div>
+              <div class="link">API</div>
+              <div class="link">Github</div>
+              <div class="button-secondary"></div>
+            </div>
+          </div>
+          <div id="map"></div>
+          <div class="slider-container">
+            <div class="radius-display">
+              <div class="text-wrapper">10</div>
+              <div class="text-wrapper-2">MILES</div>
+            </div>
+            <div class="radius-slider">
+              <div class="overlap-group">
+                <div class="bottom"></div>
+                <div class="ellipse-6"></div>
+                <div class="top"></div>
+              </div>
+            </div>
+          </div>
+          <div class="summary-table">
+            <div class="div-wrapper"><div class="text-wrapper-3">COMPETITORS</div></div>
+            <div class="summary-container">
+              <div class="text-wrapper-4">Total Competitors:</div>
+              <div class="text-wrapper-4">12</div>
+            </div>
+            <div class="table-container">
+              <div class="row">
+                <div class="cell">
+                  <div class="content"><div class="text"></div></div>
+                </div>
+                <div class="cell">
+                  <div class="content"><div class="text"></div></div>
+                </div>
+              </div>
+              <div class="row-2">
+                <div class="cell">
+                  <div class="content"><div class="text"></div></div>
+                </div>
+                <div class="cell">
+                  <div class="content"><div class="text"></div></div>
+                </div>
+              </div>
+              <div class="row-3">
+                <div class="cell">
+                  <div class="content"><div class="text"></div></div>
+                </div>
+                <div class="cell">
+                  <div class="content"><div class="text"></div></div>
+                </div>
+              </div>
+              <div class="row-4">
+                <div class="cell">
+                  <div class="content"><div class="text"></div></div>
+                </div>
+                <div class="cell">
+                  <div class="content"><div class="text"></div></div>
+                </div>
+              </div>
+              <div class="row-5">
+                <div class="cell">
+                  <div class="content"><div class="text"></div></div>
+                </div>
+                <div class="cell">
+                  <div class="content"><div class="text"></div></div>
+                </div>
+              </div>
+              <div class="row-6">
+                <div class="cell">
+                  <div class="content"><div class="text"></div></div>
+                </div>
+                <div class="cell">
+                  <div class="content"><div class="text"></div></div>
+                </div>
+              </div>
+              <div class="row-7">
+                <div class="cell">
+                  <div class="content"><div class="text"></div></div>
+                </div>
+                <div class="cell">
+                  <div class="content"><div class="text"></div></div>
+                </div>
+              </div>
+              <div class="row-8">
+                <div class="cell">
+                  <div class="content"><div class="text"></div></div>
+                </div>
+                <div class="cell">
+                  <div class="content"><div class="text"></div></div>
+                </div>
+              </div>
+              <div class="row-9">
+                <div class="cell">
+                  <div class="content"><div class="text"></div></div>
+                </div>
+                <div class="cell">
+                  <div class="content"><div class="text"></div></div>
+                </div>
+              </div>
+              <div class="row-10">
+                <div class="cell">
+                  <div class="content"><div class="text"></div></div>
+                </div>
+                <div class="cell">
+                  <div class="content"><div class="text"></div></div>
+                </div>
+              </div>
+              <div class="row-11">
+                <div class="cell">
+                  <div class="content"><div class="text"></div></div>
+                </div>
+                <div class="cell">
+                  <div class="content"><div class="text"></div></div>
+                </div>
+              </div>
+              <div class="row-12">
+                <div class="cell">
+                  <div class="content"><div class="text"></div></div>
+                </div>
+                <div class="cell">
+                  <div class="content"><div class="text"></div></div>
+                </div>
+              </div>
+              <div class="row-13">
+                <div class="cell">
+                  <div class="content"><div class="text"></div></div>
+                </div>
+                <div class="cell">
+                  <div class="content"><div class="text"></div></div>
+                </div>
+              </div>
+              <div class="row-14">
+                <div class="cell">
+                  <div class="content"><div class="text"></div></div>
+                </div>
+                <div class="cell">
+                  <div class="content"><div class="text"></div></div>
+                </div>
+              </div>
+              <div class="row-15">
+                <div class="cell">
+                  <div class="content"><div class="text"></div></div>
+                </div>
+                <div class="cell">
+                  <div class="content"><div class="text"></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="footer-container">
+            <div class="links-2">
+              <div class="link">About</div>
+              <div class="link">API</div>
+              <div class="link">Github</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <!-- JavaScript file  -->
     <script type="text/javascript" src="../static/js/logic.js"></script>
-</body>
+  </body>
 </html>
