@@ -41,28 +41,43 @@
     <div class="main-container">
         <div id="map"></div>
         <div class="interaction-container">
-            <div class="slider-container">
-                <div id="slider-display"></div> <!-- displays number selected using slider -->
-                <div id="slider"></div> <!-- displays the slider itself -->
+            <div class="input-container">
+                <div class="slider-value-container">
+                    <div id="slider-value">5</div> <!-- displays number selected using slider -->
+                    <div>MILES</div>
+                </div> 
+                <div class="slider-container">
+                    <input type="range" min="0" max="100" step="5" value="20" class="slider" id="slider-range"> <!-- displays the slider itself -->
+                </div> 
             </div>
             <div class="table-container">
                 <div class="table-title">COMPETITORS</div>
                 <table>
+                    <thead>
+                        <th>Company Name</th>
+                        <th>Store Address</th>
+                        <th>Distance from Selected Store</th>
+                    </thead>
                     <tbody>
                         <tr>
                             <td class="company-name-cell">super long company name to test the text wrapping</td>
                             <td class="address-cell">super long company address to test the text wrapping</td>
-                            <td class="distance-cell">5 miles</td>
+                            <td class="distance-cell"><span class="distance-value">5</span> miles</td>
                         </tr>
                         <tr>
                             <td class="company-name-cell">company name</td>
                             <td class="address-cell">address</td>
-                            <td class="distance-cell">distance</td>
+                            <td class="distance-cell"><span class="distance-value">5</span> miles</td>
                         </tr>
                         <tr>
                             <td class="company-name-cell">company name</td>
                             <td class="address-cell">address</td>
-                            <td class="distance-cell">distance</td>
+                            <td class="distance-cell"><span class="distance-value">5</span> miles</td>
+                        </tr>
+                        <tr>
+                            <td class="company-name-cell">company name</td>
+                            <td class="address-cell">address</td>
+                            <td class="distance-cell"><span class="distance-value">5</span> miles</td>
                         </tr>
                     </tbody>
                 </table>
@@ -81,6 +96,7 @@
           <div class="link"><a href="https://github.com/kayleepat/dispensary-competition-visualizer">Github</a></div>
         </div>
       </div>
+    <script src="../static/js/slider.js"></script>
     <script src="../static/js/logic.js"></script>
 </body>
 </html>
