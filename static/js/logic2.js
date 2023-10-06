@@ -1,6 +1,8 @@
 const url = "http://127.0.0.1:5000/api/v1.0/geoJSON"
 
-test_coords = [ 28.613140672712017, -81.43263221505724]
+const test_coords = [ 28.613140672712017, -81.43263221505724]
+current_coords = test_coords
+current_radius = 1
 
 // confirm data import
 d3.json(url).then(data => {
@@ -44,7 +46,7 @@ d3.json(url).then(data => {
         return 12742 * Math.asin(Math.sqrt(a)) * 0.6213712
       }
 
-    console.log(distance_in_miles_between_earth_coords(data.features[0].properties.latitude, data.features[0].properties.longitude, data.features[1].properties.latitude, data.features[1].properties.longitude))
+    // console.log(distance_in_miles_between_earth_coords(data.features[0].properties.latitude, data.features[0].properties.longitude, data.features[1].properties.latitude, data.features[1].properties.longitude))
     // console.log(data.features[0].properties.latitude, data.features[1].properties.latitude)
     // console.log(data.features[0].properties.longitude, data.features[1].properties.longitude) 
 
@@ -55,6 +57,7 @@ d3.json(url).then(data => {
 
 
     function plot_map(radius, center){
+        console.log(center)
 
         if (radius == 1) {
             zoom = 13
@@ -93,12 +96,12 @@ d3.json(url).then(data => {
 
 
         //add initial tile layer to the map
-        var tile_layer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        tile_layer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         })
 
-        var data_layer = L.geoJSON(data, {
+        data_layer = L.geoJSON(data, {
 
             pointToLayer: function(feature, coordinates) {
 
@@ -120,13 +123,25 @@ d3.json(url).then(data => {
 
             }
 
+        }).on('click', function(e){
+
+            console.log([e.latlng['lat'], e.latlng['lng']])
+    
+            new_coords = [e.latlng['lat'], e.latlng['lng']]
+
+            current_coords = new_coords
+            
+            updateVisuals(new_coords, radius)
+    
         })
+
+
 
         map.addLayer(tile_layer)
         map.addLayer(data_layer)
 
-        console.log(data.features[0].properties.company)
         console.log('map code ran')
+
 
     }
 
@@ -149,13 +164,13 @@ d3.json(url).then(data => {
 
     }
 
-    function add_new_radius_marker(radius){
+    function add_new_radius_marker(radius, coords){
 
         //convert radius from miles to meters
         var radius = radius * 1609.344
 
         //add circle marker
-        L.circle(test_coords, radius).addTo(map)
+        L.circle(coords, radius).addTo(map)
 
 
     }
@@ -168,7 +183,7 @@ d3.json(url).then(data => {
 
         calculate_competitors_within_radius(coordinates, radius)
         remove_old_radius_marker()
-        add_new_radius_marker(radius)
+        add_new_radius_marker(radius, coordinates)
 
         competitor_count = -1 + calculate_competitors_within_radius(coordinates[0], coordinates[1], radius)
         console.log(`competitors witin ${radius} miles: ${competitor_count}`)
@@ -176,34 +191,53 @@ d3.json(url).then(data => {
     }
 
     //main body of code that runs when map is updated
-    function main(radius=1) {
+    function main(radius = current_radius , coords = current_coords) {
 
         // set_map_radius()
 
-        // print_selected_location()
+        print_selected_location()
 
-        plot_map(radius, test_coords)
+        plot_map(radius, coords)
 
-        proccess_map_click(radius, test_coords)
+        proccess_map_click(radius, coords)
+
     }
 
+    //run main code on first website vist
     main()
 
 
     // listen for updates to the radius value. If triggered, refresh visuals
     d3.selectAll("#selDataset").on("change", updateVisuals)
+    // d3.selectAll("#map").on("click", updateVisuals)
     // d3.selectAll("#selDataset").on("click", updateVisuals)
 
-    function updateVisuals() {
+
+    function updateVisuals(new_coords = current_coords, radius) {
+
+        console.log(new_coords)
 
         let dropdown_radius = d3.select('#selDataset')
 
-        let new_radius = dropdown_radius.property('value')
+        new_radius = dropdown_radius.property('value')
 
-        main(new_radius)
+        radius = new_radius
+
+        main(new_radius, new_coords)
 
         console.log(`new radius = ${new_radius}`)
+        console.log(`new coords = ${new_coords}`)
 
     }
+    
+    // data_layer.on('click', function(e){
+
+    //     console.log([e.latlng['lat'], e.latlng['lng']])
+
+    //     new_coords = [e.latlng['lat'], e.latlng['lng']]
+        
+    //     updateVisuals(new_coords)
+
+    // })
 
 })
