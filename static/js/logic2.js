@@ -1,9 +1,31 @@
 const url = "http://127.0.0.1:5000/api/v1.0/geoJSON"
 
+test_coords = [ 28.613140672712017, -81.43263221505724]
 
 // confirm data import
 d3.json(url).then(data => {
+
+    //initial log of data
     console.log(data)
+
+    //set up options for dropdown
+    function setup_radius_dropdown() {
+
+        radius_options = [1,2,3,4,5,10,15,20,50,100]
+
+        var radius_options_list = radius_options;     
+        var sel = document.getElementById('selDataset');
+        for(var i = 0; i < radius_options_list.length; i++) {
+            var opt = document.createElement('option');
+            opt.innerHTML = radius_options_list[i];
+            opt.value = radius_options_list[i];
+            sel.appendChild(opt);
+        }
+
+    }
+
+    setup_radius_dropdown()
+
 
     function print_selected_location(){
         console.log('Test')
@@ -27,76 +49,86 @@ d3.json(url).then(data => {
     // console.log(data.features[0].properties.longitude, data.features[1].properties.longitude) 
 
 
-    function set_map_radius(radius = 5){
-        console.log(`radius = ${radius}`)
-    }
+    // function set_map_radius(radius = 5){
+    //     console.log(`radius = ${radius}`)
+    // }
 
 
-    function plot_map(){
+    function plot_map(radius, center){
+
+        if (radius == 1) {
+            zoom = 13
+        } else if( radius == 2) {
+            zoom = 12
+        } else if (radius == 3){
+            zoom = 11
+        } else if (radius == 4){
+            zoom = 11
+        } else if (radius == 5){
+            zoom = 11
+        } else if (radius == 10){
+            zoom = 11
+        }else if (radius == 15){
+            zoom = 10
+        }else if (radius == 20){
+            zoom = 9
+        }else if (radius == 50){
+            zoom = 9
+        }else if (radius == 100){
+            zoom = 8
+        } else {
+            zoom = 10
+        }
+
+        var container = L.DomUtil.get('map');
+        if(container != null){
+          container._leaflet_id = null;
+        }
 
         map = L.map('map',{
-            center: [28, -84]
-            ,zoom: 7
+            center: center
+            ,zoom: zoom
 
         })// .setView([27.6648, -81.5158], 7)
 
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+
+        //add initial tile layer to the map
+        var tile_layer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        }).addTo(map)
+        })
 
-        add_data_to_map()
+        var data_layer = L.geoJSON(data, {
+
+            pointToLayer: function(feature, coordinates) {
+
+                const color_value = 'red'
+                
+                const markerHtmlStyles = `background-color: ${color_value}`
+
+                const customicon = L.divIcon({
+
+                    html: `<span style="${markerHtmlStyles}" />`
+
+                })
+                
+                return L.marker(coordinates, {
+
+                    fillcolor: '#3388ff'
+
+                })
+
+            }
+
+        })
+
+        map.addLayer(tile_layer)
+        map.addLayer(data_layer)
+
         console.log(data.features[0].properties.company)
         console.log('map code ran')
 
     }
-
-    function add_data_to_map(){
-
-        var myStyle = {
-            "color": "#ff7800",
-            "weight": 5,
-            "opacity": 0.65
-        }
-
-        L.geoJSON(data, {
-
-            pointToLayer: function(feature, coordinates) {
-
-            const color_value = 'red'
-            
-            const markerHtmlStyles = `background-color: ${color_value}`
-
-            const customicon = L.divIcon({
-                html: `<span style="${markerHtmlStyles}" />`
-            })
-            
-            return L.marker(coordinates, {
-                fillcolor: '#3388ff'
-                // ,icon:customicon
-            })
-
-            // ,onEachFeature: function(feature, layer) {
-
-
-                    
-            //     layer.on({
-            //         click: function(e) {
-
-            //             var marker = e.target
-            //             var latlng = marker.getLatLng()
-    
-            //             // processClick(latlng)
-            //         }
-            //     })
-            // // }
-
-            }
-
-        }).addTo(map)
-
-    }
-
 
 
     function calculate_competitors_within_radius(lat_dispensary, lon_dispensary, radius) {
@@ -117,33 +149,61 @@ d3.json(url).then(data => {
 
     }
 
-    console.log(calculate_competitors_within_radius(data.features[0].properties.latitude, data.features[0].properties.longitude,5))
+    function add_new_radius_marker(radius){
 
+        //convert radius from miles to meters
+        var radius = radius * 1609.344
 
-    function proccess_map_click() {
+        //add circle marker
+        L.circle(test_coords, radius).addTo(map)
 
-        function remove_old_radius(){
-            
-        }
-
-        function add_new_radius(){
-
-        }
-
-        calculate_competitors_within_radius(location, radius)
 
     }
 
+    function remove_old_radius_marker(){
+            
+    }
 
-    function main(){
+    function proccess_map_click(radius, coordinates) {
 
-        set_map_radius()
+        calculate_competitors_within_radius(coordinates, radius)
+        remove_old_radius_marker()
+        add_new_radius_marker(radius)
 
-        print_selected_location()
+        competitor_count = -1 + calculate_competitors_within_radius(coordinates[0], coordinates[1], radius)
+        console.log(`competitors witin ${radius} miles: ${competitor_count}`)
 
-        plot_map()
+    }
+
+    //main body of code that runs when map is updated
+    function main(radius=1) {
+
+        // set_map_radius()
+
+        // print_selected_location()
+
+        plot_map(radius, test_coords)
+
+        proccess_map_click(radius, test_coords)
     }
 
     main()
+
+
+    // listen for updates to the radius value. If triggered, refresh visuals
+    d3.selectAll("#selDataset").on("change", updateVisuals)
+    // d3.selectAll("#selDataset").on("click", updateVisuals)
+
+    function updateVisuals() {
+
+        let dropdown_radius = d3.select('#selDataset')
+
+        let new_radius = dropdown_radius.property('value')
+
+        main(new_radius)
+
+        console.log(`new radius = ${new_radius}`)
+
+    }
 
 })
