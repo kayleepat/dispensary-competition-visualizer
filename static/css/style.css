@@ -294,7 +294,11 @@ th, td {
     margin: auto;
     border: 1px solid;
     border-color: #ffffff4c;
-    padding: 5px;
+}
+
+th {
+    padding: 15px;
+    font-weight: 600;
 }
 
 .table-summary {
