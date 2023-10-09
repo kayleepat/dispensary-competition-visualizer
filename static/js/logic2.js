@@ -12,20 +12,20 @@ d3.json(url).then(data => {
     console.log(data)
 
     //set up options for dropdown
-    function setup_radius_dropdown() {
+    // function setup_radius_dropdown() {
 
-        radius_options = [1,2,3,4,5,10,15,20,50,100]
+    //     radius_options = [1,2,3,4,5,10,15,20,50,100]
 
-        var radius_options_list = radius_options;     
-        var sel = document.getElementById('selDataset');
-        for(var i = 0; i < radius_options_list.length; i++) {
-            var opt = document.createElement('option');
-            opt.innerHTML = radius_options_list[i];
-            opt.value = radius_options_list[i];
-            sel.appendChild(opt);
-        }
+    //     var radius_options_list = radius_options;     
+    //     var sel = document.getElementById('selDataset');
+    //     for(var i = 0; i < radius_options_list.length; i++) {
+    //         var opt = document.createElement('option');
+    //         opt.innerHTML = radius_options_list[i];
+    //         opt.value = radius_options_list[i];
+    //         sel.appendChild(opt);
+    //     }
 
-    }
+    // }
 
     function distance_in_miles_between_earth_coords(lat1, lon1, lat2, lon2) {
         var p = 0.017453292519943295;    // Math.PI / 180
@@ -62,7 +62,7 @@ d3.json(url).then(data => {
 
     }
 
-    function add_new_radius_marker(radius, coords){
+    function add_new_radius_marker(radius = 1, coords){
 
         //convert radius from miles to meters
         var radius = radius * 1609.344
@@ -156,10 +156,6 @@ d3.json(url).then(data => {
     //main body of code that runs when map is updated
     function main(radius = 1, coords = test_coords) {
 
-        radius_dropdown_value = d3.select('#selDataset').property('value')
-
-        radius = radius_dropdown_value
-
         console.log(`radius = ${radius}`)
         console.log(`coords = ${coords}`)
 
@@ -172,12 +168,29 @@ d3.json(url).then(data => {
     }
 
     //setup dropdown values
-    setup_radius_dropdown()
+    // setup_radius_dropdown()
 
     //run main code on first website vist
     main()
 
     // listen for updates to the radius value. If triggered, refresh visuals
-    d3.selectAll("#selDataset").on("change", main)
+    // slider.oninput = function () {
+    //     // output.innerHTML = this.value
+    //     console.log('AAAAAAAAAAAAAAAAAAAA')
+    //     console.log(this.value)
+    //     main(parseInt(this.value), coords)
+    // }
+
+    // d3.select('#slider-value').on('change', function() {
+    //     main(parseInt(this.value), coords)
+    // })
+
+    // Listen for the custom event
+    document.addEventListener("inputChange", function () {
+        console.log('SSSSSSSSSSSSS')
+        console.log(slider_value)
+        // Call the function when the custom event occurs
+        main(slider_value, coords)
+    })
 
 })
