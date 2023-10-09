@@ -1,11 +1,12 @@
 const url = "http://127.0.0.1:5000/api/v1.0/geoJSON"
 
-const test_coords = [ 28.613140672712017, -81.43263221505724]
-current_coords = test_coords
-current_radius = 1
-
-// confirm data import
+// data import
 d3.json(url).then(data => {
+
+    //initial variables
+    const test_coords = { lat: 28.613140672712017, lng: -81.43263221505724 }
+    coords = test_coords
+    radius = 1
 
     //initial log of data
     console.log(data)
@@ -26,16 +27,6 @@ d3.json(url).then(data => {
 
     }
 
-    setup_radius_dropdown()
-
-
-    function print_selected_location(){
-        console.log('Test')
-    }
-
-    // [-81.43263221505724, 28.613140672712017]
-
-
     function distance_in_miles_between_earth_coords(lat1, lon1, lat2, lon2) {
         var p = 0.017453292519943295;    // Math.PI / 180
         var c = Math.cos;
@@ -44,20 +35,44 @@ d3.json(url).then(data => {
                 (1 - c((lon2 - lon1) * p))/2;
       
         return 12742 * Math.asin(Math.sqrt(a)) * 0.6213712
-      }
+    }
 
-    // console.log(distance_in_miles_between_earth_coords(data.features[0].properties.latitude, data.features[0].properties.longitude, data.features[1].properties.latitude, data.features[1].properties.longitude))
-    // console.log(data.features[0].properties.latitude, data.features[1].properties.latitude)
-    // console.log(data.features[0].properties.longitude, data.features[1].properties.longitude) 
+    function calculate_competitors_within_radius(radius, coords) {
 
+        var competitors = 0
+        var lat_dispensary = coords.lat
+        var lon_dispensary = coords.lng
+        
+        for (i = 0; i < data.features.length ; i++){
+            
+            distance_between_dispensaries = distance_in_miles_between_earth_coords(lat_dispensary, lon_dispensary, data.features[i].properties.latitude, data.features[i].properties.longitude)
 
-    // function set_map_radius(radius = 5){
-    //     console.log(`radius = ${radius}`)
-    // }
+            if (distance_between_dispensaries <= radius) {
+                competitors = competitors + 1
+            }
+            
+        }
 
+        //subtract one from competitors to account for self
+        competitors = competitors - 1
 
-    function plot_map(radius, center){
-        console.log(center)
+        console.log(`competitors within ${radius} miles = ${competitors}`)
+
+        return competitors
+
+    }
+
+    function add_new_radius_marker(radius, coords){
+
+        //convert radius from miles to meters
+        var radius = radius * 1609.344
+
+        //add circle marker
+        L.circle(coords, radius).addTo(map)
+
+    }
+
+    function plot_map(radius, center = test_coords){
 
         if (radius == 1) {
             zoom = 13
@@ -125,119 +140,44 @@ d3.json(url).then(data => {
 
         }).on('click', function(e){
 
-            console.log([e.latlng['lat'], e.latlng['lng']])
-    
-            new_coords = [e.latlng['lat'], e.latlng['lng']]
+            coords = e.latlng
 
-            current_coords = new_coords
-            
-            updateVisuals(new_coords, radius)
+            console.log(`clicked coords = ${coords}`)
+
+            main(radius = radius, coords = coords)
     
         })
-
-
 
         map.addLayer(tile_layer)
         map.addLayer(data_layer)
 
-        console.log('map code ran')
-
-
-    }
-
-
-    function calculate_competitors_within_radius(lat_dispensary, lon_dispensary, radius) {
-
-        var competitors = 0
-        
-        for (i = 0; i < data.features.length ; i++){
-            
-            distance_between_dispensaries = distance_in_miles_between_earth_coords(lat_dispensary, lon_dispensary, data.features[i].properties.latitude, data.features[i].properties.longitude)
-
-            if (distance_between_dispensaries <= radius) {
-                competitors = competitors + 1
-            }
-            
-        }
-
-        return competitors
-
-    }
-
-    function add_new_radius_marker(radius, coords){
-
-        //convert radius from miles to meters
-        var radius = radius * 1609.344
-
-        //add circle marker
-        L.circle(coords, radius).addTo(map)
-
-
-    }
-
-    function remove_old_radius_marker(){
-            
-    }
-
-    function proccess_map_click(radius, coordinates) {
-
-        calculate_competitors_within_radius(coordinates, radius)
-        remove_old_radius_marker()
-        add_new_radius_marker(radius, coordinates)
-
-        competitor_count = -1 + calculate_competitors_within_radius(coordinates[0], coordinates[1], radius)
-        console.log(`competitors witin ${radius} miles: ${competitor_count}`)
-
     }
 
     //main body of code that runs when map is updated
-    function main(radius = current_radius , coords = current_coords) {
+    function main(radius = 1, coords = test_coords) {
 
-        // set_map_radius()
+        radius_dropdown_value = d3.select('#selDataset').property('value')
 
-        print_selected_location()
+        radius = radius_dropdown_value
+
+        console.log(`radius = ${radius}`)
+        console.log(`coords = ${coords}`)
 
         plot_map(radius, coords)
 
-        proccess_map_click(radius, coords)
+        add_new_radius_marker(radius, coords)
+
+        calculate_competitors_within_radius(radius, coords)
 
     }
+
+    //setup dropdown values
+    setup_radius_dropdown()
 
     //run main code on first website vist
     main()
 
-
     // listen for updates to the radius value. If triggered, refresh visuals
-    d3.selectAll("#selDataset").on("change", updateVisuals)
-    // d3.selectAll("#map").on("click", updateVisuals)
-    // d3.selectAll("#selDataset").on("click", updateVisuals)
-
-
-    function updateVisuals(new_coords = current_coords, radius) {
-
-        console.log(new_coords)
-
-        let dropdown_radius = d3.select('#selDataset')
-
-        new_radius = dropdown_radius.property('value')
-
-        radius = new_radius
-
-        main(new_radius, new_coords)
-
-        console.log(`new radius = ${new_radius}`)
-        console.log(`new coords = ${new_coords}`)
-
-    }
-    
-    // data_layer.on('click', function(e){
-
-    //     console.log([e.latlng['lat'], e.latlng['lng']])
-
-    //     new_coords = [e.latlng['lat'], e.latlng['lng']]
-        
-    //     updateVisuals(new_coords)
-
-    // })
+    d3.selectAll("#selDataset").on("change", main)
 
 })
