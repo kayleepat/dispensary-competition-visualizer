@@ -1,4 +1,4 @@
-const url = "http://127.0.0.1:5000/api/v1.0/geoJSON"
+const url = "/api/v1.0/geoJSON"
 
 // data import
 d3.json(url).then(data => {
@@ -180,7 +180,8 @@ d3.json(url).then(data => {
         }
 
         var chartOptions = {
-
+            responsive: true,
+            maintainAspectRatio: false
         }
 
         pieChart = new Chart(ctx_pie, {
@@ -222,7 +223,8 @@ d3.json(url).then(data => {
     function update_table(table_data, competitor_count){
 
         //update competitor summary
-        d3.select('#competitor-count').innerHTML = competitor_count
+        let competitorCountDisplay = d3.select('#competitor-count')
+        competitorCountDisplay.text(competitor_count)
 
         //update main tale body
         table_body = d3.select('tbody')
@@ -234,16 +236,15 @@ d3.json(url).then(data => {
 
         //remove the first element of table data - it is the selected dispensary
         //first element will always be self since the array is sorted high to low
-        table_data = table_data.slice(0, 10)
+        table_data = table_data.slice(1, 11)
 
-        // row_count = Math.max(table_data.length, 10)
         row_count = table_data.length
 
         for(i=0; i<row_count; i++){
             var row = table_body.append('tr')
             row.append('td').text(table_data[i].company_name)
             row.append('td').text(table_data[i].address)
-            row.append('td').text(`${Math.round(table_data[i].distance,0)} mi`)
+            row.append('td').text(`${table_data[i].distance.toFixed(1)} mi`)
         }
 
     }
