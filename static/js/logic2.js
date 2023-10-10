@@ -39,24 +39,37 @@ d3.json(url).then(data => {
 
     function calculate_competitors_within_radius(radius, coords) {
 
-        var competitors = 0
+        var competitors = -1 // start at -1 to account for self counting
         var lat_dispensary = coords.lat
         var lon_dispensary = coords.lng
+        var table_data = []
         
         for (i = 0; i < data.features.length ; i++){
             
             distance_between_dispensaries = distance_in_miles_between_earth_coords(lat_dispensary, lon_dispensary, data.features[i].properties.latitude, data.features[i].properties.longitude)
+            
+            
 
             if (distance_between_dispensaries <= radius) {
                 competitors = competitors + 1
+                console.log('BBBBBBBBBBBBBBBBBBBBBB')
+
+                // #name, add, distance
+                table_data.push({
+                    'company name': data.features[i].properties.company
+                    ,'address': data.features[i].properties.full_address
+                    ,'distance': distance_between_dispensaries
+                    ,'competitors': competitors
+                })
             }
             
         }
 
-        //subtract one from competitors to account for self
-        competitors = competitors - 1
+        // //subtract one from competitors to account for self
+        // competitors = competitors - 1
 
         console.log(`competitors within ${radius} miles = ${competitors}`)
+        console.log(table_data)
 
         return competitors
 
