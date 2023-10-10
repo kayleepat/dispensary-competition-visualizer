@@ -19,6 +19,8 @@ d3.json(url).then(data => {
         var a = 0.5 - c((lat2 - lat1) * p)/2 + 
                 c(lat1 * p) * c(lat2 * p) * 
                 (1 - c((lon2 - lon1) * p))/2;
+
+        console.log("Calculated Miles")
       
         return 12742 * Math.asin(Math.sqrt(a)) * 0.6213712
     }
@@ -54,8 +56,8 @@ d3.json(url).then(data => {
         // //subtract one from competitors to account for self
         // competitors = competitors - 1
 
-        console.log(`competitors within ${radius} miles = ${competitors}`)
-        console.log(table_data)
+        // console.log(`competitors within ${radius} miles = ${competitors}`)
+        // console.log(table_data)
 
         // sort table data based on distance from selected location (high to low)
         table_data.sort((a, b) => a.distance - b.distance);
@@ -65,6 +67,8 @@ d3.json(url).then(data => {
         // update_charts(ctx_bar, table_data)
         update_pie_chart(pieChart, table_data)
         update_bar_chart(barChart, table_data)
+
+        console.log("Calculated Competitors")
 
         return competitors
 
@@ -77,6 +81,8 @@ d3.json(url).then(data => {
 
         //add circle marker
         L.circle(coords, radius).addTo(map)
+
+        console.log('New Radius Marker')
 
     }
 
@@ -142,7 +148,7 @@ d3.json(url).then(data => {
                 
                 const marker = L.marker(coordinates, {
 
-                    fillcolor: '#3388ff'
+                    title: feature.properties.company
                     
                     
                 }).bindPopup(
@@ -157,7 +163,7 @@ d3.json(url).then(data => {
 
             coords = e.latlng
 
-            console.log(`clicked coords = ${coords}`)
+            // console.log(`clicked coords = ${coords}`)
 
             main(radius = radius, coords = coords)
 
@@ -167,7 +173,7 @@ d3.json(url).then(data => {
 
         map.addLayer(tile_layer)
         map.addLayer(data_layer)
-
+        console.log('Map Plot')
     }
 
     function initCharts() {
@@ -240,6 +246,8 @@ d3.json(url).then(data => {
                 }
             }
         });
+
+        console.log("Charts Initialized")
     }
     
     
@@ -255,8 +263,8 @@ d3.json(url).then(data => {
         var td = agg_table_data(table_data, 'company_name')
         // console.log(typeof td)
 
-        console.log(`Obj Keys: ${Object.keys(td)}`)
-        console.log(`Obj Values: ${Object.values(td)}`)
+        // console.log(`Obj Keys: ${Object.keys(td)}`)
+        // console.log(`Obj Values: ${Object.values(td)}`)
 
         const customColours = generateChartColours(Object.keys(td).length)
 
@@ -275,6 +283,7 @@ d3.json(url).then(data => {
 
         // refresh chart
         chart.update();
+        console.log('Pie Chart Updated')
     }
 
 
@@ -294,6 +303,7 @@ d3.json(url).then(data => {
     
         // Refresh chart
         chart.update();
+        console.log('Bar Chart Updated')
     }
 
     function generateChartColours(numColours) {
@@ -307,7 +317,8 @@ d3.json(url).then(data => {
             const colour = `hsl(${hue}, 70%, 50%)`;
             colours.push(colour);
         }
-    
+        
+        console.log('Colours Generated')
         return colours;
     }
 
@@ -338,13 +349,14 @@ d3.json(url).then(data => {
             row.append('td').text(`${table_data[i].distance.toFixed(1)} mi`)
         }
 
+        console.log('Table Updated')
     }
 
     //main body of code that runs when map is updated
     function main(radius = 10, coords = test_coords) {
-
-        console.log(`radius = ${radius}`)
-        console.log(`coords = ${coords}`)
+        console.log("Main Func Start")
+        // console.log(`radius = ${radius}`)
+        // console.log(`coords = ${coords}`)
 
         plot_map(radius, coords)
         
@@ -352,6 +364,7 @@ d3.json(url).then(data => {
 
         calculate_competitors_within_radius(radius, coords)
 
+        console.log('Main Func End')
     }
 
     //run main code on first website vist
@@ -360,8 +373,8 @@ d3.json(url).then(data => {
 
     // Listen for the custom event
     document.addEventListener("inputChange", function () {
-        console.log('SSSSSSSSSSSSS')
-        console.log(slider_value)
+        // console.log('SSSSSSSSSSSSS')
+        // console.log(slider_value)
         // Call the function when the custom event occurs
         main(slider_value, coords)
     })
