@@ -163,7 +163,7 @@ a:visited {
     justify-content: space-between;
     flex: 1;
     padding: 20px;
-    max-height: calc(100vh - 80px);
+    max-height: calc(100vh - 100px) !important;
     /* overflow-y: auto; */
     /* z-index: 1; */
 }
@@ -271,6 +271,9 @@ a:visited {
     backdrop-filter: blur(12px) brightness(100%);
     -webkit-backdrop-filter: blur(12px) brightness(100%);
     background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.1));
+
+    max-height: 70vh;
+    overflow-y: auto;
 }
 
 .table-title,
@@ -295,6 +298,7 @@ table {
     table-layout: fixed;
     width: 100%;
     border-collapse: collapse;
+    
 }
 
 th, td {
@@ -310,10 +314,10 @@ th {
     font-weight: 600;
 }
 
-tbody {
-    max-height: 500px;
+/* tbody {
+    max-height: 50vh;
     overflow-y: auto;
-}
+} */
 
 .table-summary {
     flex: 10%;
