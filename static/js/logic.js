@@ -168,8 +168,12 @@ d3.json(url).then(data => {
                     },
                 },
                 plugins: {
+                    title: {
+                        display: true,
+                        text: 'Local Market Share'
+                    },
                     legend: {
-                        display: true, // Hide legend
+                        display: false, // Hide legend
                     },
                 },
             },
