@@ -1,5 +1,7 @@
 const url = "http://127.0.0.1:5000/api/v1.0/geoJSON"
 
+td_glob = null
+
 // data import
 d3.json(url).then(data => {
 
@@ -11,6 +13,7 @@ d3.json(url).then(data => {
     //initial log of data
     console.log(data)
 
+<<<<<<< Updated upstream
     //set up options for dropdown
     function setup_radius_dropdown() {
 
@@ -26,6 +29,8 @@ d3.json(url).then(data => {
         }
 
     }
+=======
+>>>>>>> Stashed changes
 
     function distance_in_miles_between_earth_coords(lat1, lon1, lat2, lon2) {
         var p = 0.017453292519943295;    // Math.PI / 180
@@ -36,6 +41,7 @@ d3.json(url).then(data => {
       
         return 12742 * Math.asin(Math.sqrt(a)) * 0.6213712
     }
+
 
     function calculate_competitors_within_radius(radius, coords) {
 
@@ -53,16 +59,78 @@ d3.json(url).then(data => {
             
         }
 
+<<<<<<< Updated upstream
         //subtract one from competitors to account for self
         competitors = competitors - 1
+=======
+
+>>>>>>> Stashed changes
 
         console.log(`competitors within ${radius} miles = ${competitors}`)
+
+        //aggregate table data by taking the count of each object by the company_name property
+        // code inspired by https://quickref.me/count-by-the-properties-of-an-array-of-objects
+        const agg_table_data = (table_data, prop) => table_data.reduce((prev, curr) =>
+        (prev[curr[prop]] = ++prev[curr[prop]] || 1, prev),{})
+
+        var td = agg_table_data(table_data, 'company_name')
+
+        var ctx_bar = document.getElementById('bar-chart').getContext('2d')
+        var ctx_pie = document.getElementById('pie-chart').getContext('2d')
+
+        function addData(chart, label, newData) {
+            chart.data.labels.push(label);
+            chart.data.datasets.forEach((dataset) => {
+                dataset.data.push(newData);
+            });
+            chart.update();
+        }
+        
+        function removeData(chart) {
+            chart.data.labels.pop();
+            chart.data.datasets.forEach((dataset) => {
+                dataset.data.pop();
+            });
+            chart.update();
+        }
+
+        if(ctx_bar != undefined){
+            removeData(ctx_bar)
+
+        }
+        addData(ctx_bar, Object.keys(td), Object.values(td))
+        if(ctx_pie != undefined){
+            removeData(ctx_pie)
+
+        }
+        addData(ctx_pie, Object.keys(td), Object.values(td))
+
+
+    
+        // Create a pie chart instance
+        var pieChart = new Chart(ctx_pie, {
+            type: 'pie',
+            data: chart_data,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+            }
+        })
+
+        console.log(td)
+
+        td_glob = td
 
         return competitors
 
     }
 
+<<<<<<< Updated upstream
     function add_new_radius_marker(radius, coords){
+=======
+
+    function add_new_radius_marker(radius = 1, coords){
+>>>>>>> Stashed changes
 
         //convert radius from miles to meters
         var radius = radius * 1609.344
@@ -71,6 +139,7 @@ d3.json(url).then(data => {
         L.circle(coords, radius).addTo(map)
 
     }
+
 
     function plot_map(radius, center = test_coords){
 
@@ -107,8 +176,7 @@ d3.json(url).then(data => {
             center: center
             ,zoom: zoom
 
-        })// .setView([27.6648, -81.5158], 7)
-
+        })
 
         //add initial tile layer to the map
         tile_layer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -153,6 +221,42 @@ d3.json(url).then(data => {
 
     }
 
+<<<<<<< Updated upstream
+=======
+    function update_table(table_data, competitor_count){
+
+        //update competitor summary
+        var comp_summary = document.getElementById("competitor-count")
+        comp_summary.innerHTML = competitor_count
+
+        //update main tale body
+        table_body = d3.select('tbody')
+
+        // clean up old table if needed
+        if(table_body != undefined){
+            table_body.selectAll('tr').remove()
+        }
+
+        //remove the first element of table data - it is the selected dispensary
+        //first element will always be self since the array is sorted high to low
+        table_data = table_data.slice(0, 10)
+
+        // row_count = Math.max(table_data.length, 10)
+        row_count = table_data.length
+
+        for(i=0; i<row_count; i++){
+            var row = table_body.append('tr')
+            var cell = row.append('td').text(table_data[i].company_name)
+            var cell = row.append('td').text(table_data[i].address)
+            var cell = row.append('td').text(`${Math.round(table_data[i].distance,0)} mi`)
+        }
+
+    }
+
+
+
+
+>>>>>>> Stashed changes
     //main body of code that runs when map is updated
     function main(radius = 1, coords = test_coords) {
 
@@ -171,6 +275,7 @@ d3.json(url).then(data => {
 
     }
 
+<<<<<<< Updated upstream
     //setup dropdown values
     setup_radius_dropdown()
 
@@ -179,5 +284,52 @@ d3.json(url).then(data => {
 
     // listen for updates to the radius value. If triggered, refresh visuals
     d3.selectAll("#selDataset").on("change", main)
+=======
+    //run main code on first website vist
+    main()
+
+    var chart_data = {
+        labels: Object.keys(td_glob),
+        datasets: [{
+            label: 'Sample Data',
+            data: Object.values(td_glob),
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)'
+            ],
+            borderWidth: 1
+        }]
+    }
+
+    // Create the bar chart
+    var myBarChart = new Chart(ctx_bar, {
+        type: 'bar',
+        data: chart_data,
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    })  
+
+    // Listen for the custom event
+    document.addEventListener("inputChange", function () {
+
+        // Call the function when the custom event occurs
+        main(slider_value, coords)
+    })
+>>>>>>> Stashed changes
 
 })
