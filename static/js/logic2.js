@@ -47,8 +47,7 @@ d3.json(url).then(data => {
         for (i = 0; i < data.features.length ; i++){
             
             distance_between_dispensaries = distance_in_miles_between_earth_coords(lat_dispensary, lon_dispensary, data.features[i].properties.latitude, data.features[i].properties.longitude)
-            
-            
+    
 
             if (distance_between_dispensaries <= radius) {
 
@@ -190,8 +189,9 @@ d3.json(url).then(data => {
 
         //remove the first element of table data - it is the selected dispensary
         //first element will always be self since the array is sorted high to low
-        // table_data = table_data.slice(1, table_data.length)
+        table_data = table_data.slice(0, 10)
 
+        // row_count = Math.max(table_data.length, 10)
         row_count = table_data.length
 
         for(i=0; i<row_count; i++){
