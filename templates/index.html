@@ -9,11 +9,13 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
     crossorigin=""/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
-    <!-- Leaflet JavaScript code -->
+
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-    crossorigin=""></script>
+     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+     crossorigin=""></script>
 
     <!-- D3 library -->
     <script src="https://d3js.org/d3.v7.min.js"></script>
@@ -50,7 +52,7 @@
                     <div>MILES</div>
                 </div> 
                 <div class="slider-container">
-                    <input type="range" min="0" max="100" step="5" value="20" class="slider" id="slider-range"> <!-- displays the slider itself -->
+                    <input type="range" min="0" max="75" step="1" value="1" class="slider" id="slider-range"> <!-- displays the slider itself -->
                 </div> 
             </div>
             <div class="table-container">
@@ -62,7 +64,7 @@
                         <th>Distance from Selected Store</th>
                     </thead>
                     <tbody>
-                        <tr>
+                        <!-- <tr>
                             <td class="company-name-cell">super long company name to test the text wrapping</td>
                             <td class="address-cell">super long company address to test the text wrapping</td>
                             <td class="distance-cell"><span class="distance-value">5</span> miles</td>
@@ -87,11 +89,17 @@
                             <td class="address-cell">address</td>
                             <td class="distance-cell"><span class="distance-value">5</span> miles</td>
                         </tr>
+                        <tr>
+                            <td class="company-name-cell">company name</td>
+                            <td class="address-cell">address</td>
+                            <td class="distance-cell"><span class="distance-value">5</span> miles</td>
+                        </tr> -->
+
                     </tbody>
                 </table>
                 <div class="table-summary">
                     <div class="summary-title">Total Competitors:</div>
-                    <div id="competitor-count">###</div>
+                    <div id="competitor-count">0</div>
                 </div>
             </div>
         </div>
@@ -115,5 +123,6 @@
     <script src="../static/js/slider.js"></script>
     <script src="../static/js/logic.js"></script>
     <script src="../static/js/charts.js"></script>
+    <script src="../static/js/logic2.js"></script>
 </body>
 </html>

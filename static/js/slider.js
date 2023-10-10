@@ -5,5 +5,11 @@ output.innerHTML = slider.value
 
 slider.oninput = function () {
     output.innerHTML = this.value
-    console.log(this.value)
+    slider_value = this.value
+
+    // Create a custom event
+    var inputEvent = new Event("inputChange");
+
+    // Dispatch the custom event
+    document.dispatchEvent(inputEvent);
 }
