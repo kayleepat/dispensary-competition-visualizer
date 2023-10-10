@@ -20,6 +20,7 @@ This webpage is powered by several dependencies shown below:
 - [SQLite](https://www.sqlite.org/index.html)
 - [Pandas](https://pandas.pydata.org/docs/)
 - [Numpy](https://numpy.org/doc/)
+- [Geoapify API](https://www.geoapify.com/)
 
 ## Data Source
 The data used in this application is sourced from the [Office of Medical Marijuana Use Website](https://knowthefactsmmj.com/mmtc/). The data is first scraped from the website and then stored in an SQLite database. To facilitate its visualization, the data is converted into geoJSON format for use with the Leaflet library.
