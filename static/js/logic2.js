@@ -114,6 +114,7 @@ d3.json(url).then(data => {
         map = L.map('map',{
             center: center
             ,zoom: zoom
+            ,autoClose: false
 
         })// .setView([27.6648, -81.5158], 7)
 
@@ -137,13 +138,18 @@ d3.json(url).then(data => {
                     html: `<span style="${markerHtmlStyles}" />`
 
                 })
+
                 
-                return L.marker(coordinates, {
+                const marker = L.marker(coordinates, {
 
                     fillcolor: '#3388ff'
                     
                     
-                })
+                }).bindPopup(
+                    `<strong>${feature.properties.company}</strong><br>${feature.properties.full_address}`
+                )
+
+                return marker
 
             }
 
@@ -169,7 +175,7 @@ d3.json(url).then(data => {
         const ctx_pie = document.getElementById('pie-chart').getContext('2d');
 
         const customColours = generateChartColours(25)
-        console.log(`Colours: ${customColours}`)
+        // console.log(`Colours: ${customColours}`)
     
         var chartData = {
             labels: [], // Initialize an empty array for labels
@@ -221,7 +227,18 @@ d3.json(url).then(data => {
         barChart = new Chart(ctx_bar, {
             type: 'bar',
             data: chartData,
-            options: chartOptions,
+            options: {
+                ...chartOptions,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Miles'
+                        }
+                    }
+                }
+            }
         });
     }
     
@@ -236,7 +253,7 @@ d3.json(url).then(data => {
         (prev[curr[prop]] = ++prev[curr[prop]] || 1, prev),{})
 
         var td = agg_table_data(table_data, 'company_name')
-        console.log(typeof td)
+        // console.log(typeof td)
 
         console.log(`Obj Keys: ${Object.keys(td)}`)
         console.log(`Obj Values: ${Object.values(td)}`)
@@ -330,17 +347,12 @@ d3.json(url).then(data => {
         console.log(`coords = ${coords}`)
 
         plot_map(radius, coords)
-
-        
         
         add_new_radius_marker(radius, coords)
 
         calculate_competitors_within_radius(radius, coords)
 
     }
-
-    //setup dropdown values
-    // setup_radius_dropdown()
 
     //run main code on first website vist
     initCharts()
