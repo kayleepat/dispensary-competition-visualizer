@@ -8,6 +8,7 @@ d3.json(url).then(data => {
     coords = test_coords
     radius = 10
     var pieChart
+    var barChart
 
     //initial log of data
     console.log(data)
@@ -62,7 +63,8 @@ d3.json(url).then(data => {
         update_table(table_data, competitors)
 
         // update_charts(ctx_bar, table_data)
-        update_charts(pieChart, table_data)
+        update_pie_chart(pieChart, table_data)
+        update_bar_chart(barChart, table_data)
 
         return competitors
 
@@ -163,35 +165,60 @@ d3.json(url).then(data => {
     }
 
     function initCharts() {
-        var ctx_bar = document.getElementById('bar-chart').getContext('2d')
-        var ctx_pie = document.getElementById('pie-chart').getContext('2d')
-
+        var ctx_bar = document.getElementById('bar-chart').getContext('2d');
+        var ctx_pie = document.getElementById('pie-chart').getContext('2d');
+    
         var chartData = {
             labels: [], // Initialize an empty array for labels
             datasets: [
                 {
-                label: 'Data',
-                data: [], // Initialize an empty array for data
-                backgroundColor: [
-                    // Add background colors here
-                ],
+                    label: 'Data',
+                    data: [], // Initialize an empty array for data
+                    backgroundColor: [
+                        // Add background colors here
+                    ],
                 },
             ],
-        }
-
+        };
+    
         var chartOptions = {
             responsive: true,
-            maintainAspectRatio: false
-        }
-
+            maintainAspectRatio: false,
+        };
+    
         pieChart = new Chart(ctx_pie, {
-        type: 'doughnut', // Replace with your chart type
-        data: chartData,
-        options: chartOptions
-        })
+            type: 'doughnut',
+            data: chartData,
+            options: {
+                ...chartOptions, // Keep common options
+                scales: {
+                    // Disable grid lines
+                    x: {
+                        display: false,
+                    },
+                    y: {
+                        display: false,
+                    },
+                },
+                plugins: {
+                    legend: {
+                        display: true, // Hide legend
+                    },
+                },
+            },
+        });
+    
+        barChart = new Chart(ctx_bar, {
+            type: 'bar',
+            data: chartData,
+            options: chartOptions,
+        });
     }
+    
+    
 
-    function update_charts(chart, table_data) {
+    function update_pie_chart(chart, table_data) {
+        table_data = table_data.slice(1)
 
         // aggregate table data by taking the count of each object by the company_name property
         // code inspired by https://quickref.me/count-by-the-properties-of-an-array-of-objects
@@ -217,6 +244,22 @@ d3.json(url).then(data => {
         });
 
         // refresh chart
+        chart.update();
+    }
+
+
+    function update_bar_chart(chart, table_data) {
+        table_data = table_data.slice(1)
+
+        // Extract company names and distances from table_data
+        const companyNames = table_data.map(item => item.company_name)
+        const distances = table_data.map(item => item.distance)
+    
+        // Update chart data
+        chart.data.labels = companyNames
+        chart.data.datasets[0].data = distances
+    
+        // Refresh chart
         chart.update();
     }
 
