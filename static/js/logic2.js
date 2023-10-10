@@ -6,26 +6,11 @@ d3.json(url).then(data => {
     //initial variables
     const test_coords = { lat: 28.613140672712017, lng: -81.43263221505724 }
     coords = test_coords
-    radius = 1
+    radius = 10
+    var pieChart
 
     //initial log of data
     console.log(data)
-
-    //set up options for dropdown
-    // function setup_radius_dropdown() {
-
-    //     radius_options = [1,2,3,4,5,10,15,20,50,100]
-
-    //     var radius_options_list = radius_options;     
-    //     var sel = document.getElementById('selDataset');
-    //     for(var i = 0; i < radius_options_list.length; i++) {
-    //         var opt = document.createElement('option');
-    //         opt.innerHTML = radius_options_list[i];
-    //         opt.value = radius_options_list[i];
-    //         sel.appendChild(opt);
-    //     }
-
-    // }
 
     function distance_in_miles_between_earth_coords(lat1, lon1, lat2, lon2) {
         var p = 0.017453292519943295;    // Math.PI / 180
@@ -76,11 +61,14 @@ d3.json(url).then(data => {
 
         update_table(table_data, competitors)
 
+        // update_charts(ctx_bar, table_data)
+        update_charts(pieChart, table_data)
+
         return competitors
 
     }
 
-    function add_new_radius_marker(radius = 1, coords){
+    function add_new_radius_marker(radius, coords){
 
         //convert radius from miles to meters
         var radius = radius * 1609.344
@@ -174,6 +162,63 @@ d3.json(url).then(data => {
 
     }
 
+    function initCharts() {
+        var ctx_bar = document.getElementById('bar-chart').getContext('2d')
+        var ctx_pie = document.getElementById('pie-chart').getContext('2d')
+
+        var chartData = {
+            labels: [], // Initialize an empty array for labels
+            datasets: [
+                {
+                label: 'Data',
+                data: [], // Initialize an empty array for data
+                backgroundColor: [
+                    // Add background colors here
+                ],
+                },
+            ],
+        }
+
+        var chartOptions = {
+
+        }
+
+        pieChart = new Chart(ctx_pie, {
+        type: 'doughnut', // Replace with your chart type
+        data: chartData,
+        options: chartOptions
+        })
+    }
+
+    function update_charts(chart, table_data) {
+
+        // aggregate table data by taking the count of each object by the company_name property
+        // code inspired by https://quickref.me/count-by-the-properties-of-an-array-of-objects
+        const agg_table_data = (table_data, prop) => table_data.reduce((prev, curr) =>
+        (prev[curr[prop]] = ++prev[curr[prop]] || 1, prev),{})
+
+        var td = agg_table_data(table_data, 'company_name')
+        console.log(typeof td)
+
+        console.log(`Obj Keys: ${Object.keys(td)}`)
+        console.log(`Obj Values: ${Object.values(td)}`)
+
+        // remove old data
+        chart.data.labels.length = 0
+        chart.data.datasets.forEach((dataset) => {
+            dataset.data.length = 0
+        })
+
+        // add new data
+        chart.data.labels.push(...Object.keys(td));
+        chart.data.datasets.forEach((dataset) => {
+            dataset.data.push(...Object.values(td));
+        });
+
+        // refresh chart
+        chart.update();
+    }
+
     function update_table(table_data, competitor_count){
 
         //update competitor summary
@@ -196,21 +241,23 @@ d3.json(url).then(data => {
 
         for(i=0; i<row_count; i++){
             var row = table_body.append('tr')
-            var cell = row.append('td').text(table_data[i].company_name)
-            var cell = row.append('td').text(table_data[i].address)
-            var cell = row.append('td').text(`${Math.round(table_data[i].distance,0)} mi`)
+            row.append('td').text(table_data[i].company_name)
+            row.append('td').text(table_data[i].address)
+            row.append('td').text(`${Math.round(table_data[i].distance,0)} mi`)
         }
 
     }
 
     //main body of code that runs when map is updated
-    function main(radius = 1, coords = test_coords) {
+    function main(radius = 10, coords = test_coords) {
 
         console.log(`radius = ${radius}`)
         console.log(`coords = ${coords}`)
 
         plot_map(radius, coords)
 
+        
+        
         add_new_radius_marker(radius, coords)
 
         calculate_competitors_within_radius(radius, coords)
@@ -221,19 +268,8 @@ d3.json(url).then(data => {
     // setup_radius_dropdown()
 
     //run main code on first website vist
+    initCharts()
     main()
-
-    // listen for updates to the radius value. If triggered, refresh visuals
-    // slider.oninput = function () {
-    //     // output.innerHTML = this.value
-    //     console.log('AAAAAAAAAAAAAAAAAAAA')
-    //     console.log(this.value)
-    //     main(parseInt(this.value), coords)
-    // }
-
-    // d3.select('#slider-value').on('change', function() {
-    //     main(parseInt(this.value), coords)
-    // })
 
     // Listen for the custom event
     document.addEventListener("inputChange", function () {
