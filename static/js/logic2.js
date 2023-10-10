@@ -165,18 +165,19 @@ d3.json(url).then(data => {
     }
 
     function initCharts() {
-        var ctx_bar = document.getElementById('bar-chart').getContext('2d');
-        var ctx_pie = document.getElementById('pie-chart').getContext('2d');
+        const ctx_bar = document.getElementById('bar-chart').getContext('2d');
+        const ctx_pie = document.getElementById('pie-chart').getContext('2d');
+
+        const customColours = generateChartColours(25)
+        console.log(`Colours: ${customColours}`)
     
         var chartData = {
             labels: [], // Initialize an empty array for labels
             datasets: [
                 {
-                    label: 'Data',
+                    label: '',
                     data: [], // Initialize an empty array for data
-                    backgroundColor: [
-                        // Add background colors here
-                    ],
+                    backgroundColor: customColours,
                 },
             ],
         };
@@ -184,6 +185,15 @@ d3.json(url).then(data => {
         var chartOptions = {
             responsive: true,
             maintainAspectRatio: false,
+            plugins: {
+                title: {
+                  display: true,
+                  text: 'Distance from Selected Store',
+                },
+                legend: {
+                    display: false
+                } 
+            }
         };
     
         pieChart = new Chart(ctx_pie, {
@@ -231,6 +241,8 @@ d3.json(url).then(data => {
         console.log(`Obj Keys: ${Object.keys(td)}`)
         console.log(`Obj Values: ${Object.values(td)}`)
 
+        const customColours = generateChartColours(Object.keys(td).length)
+
         // remove old data
         chart.data.labels.length = 0
         chart.data.datasets.forEach((dataset) => {
@@ -238,6 +250,7 @@ d3.json(url).then(data => {
         })
 
         // add new data
+        chart.data.datasets[0].backgroundColor = customColours
         chart.data.labels.push(...Object.keys(td));
         chart.data.datasets.forEach((dataset) => {
             dataset.data.push(...Object.values(td));
@@ -254,13 +267,31 @@ d3.json(url).then(data => {
         // Extract company names and distances from table_data
         const companyNames = table_data.map(item => item.company_name)
         const distances = table_data.map(item => item.distance)
+
+        const customColours = generateChartColours(table_data.length)
     
         // Update chart data
+        chart.data.datasets[0].backgroundColor = customColours
         chart.data.labels = companyNames
         chart.data.datasets[0].data = distances
     
         // Refresh chart
         chart.update();
+    }
+
+    function generateChartColours(numColours) {
+        const colours = [];
+        const greenHueStart = 160; // Green hue range (approximately)
+        const blueHueEnd = 240;   // Blue hue range (approximately)
+        const hueRange = blueHueEnd - greenHueStart;
+    
+        for (let i = 0; i < numColours; i++) {
+            const hue = greenHueStart + (i * (hueRange / numColours));
+            const colour = `hsl(${hue}, 70%, 50%)`;
+            colours.push(colour);
+        }
+    
+        return colours;
     }
 
     function update_table(table_data, competitor_count){
