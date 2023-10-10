@@ -37,6 +37,10 @@ body {
     /* z-index: -1; */
 }
 
+h1 {
+    font-weight: 600;
+}
+
 .header-container {
     position: fixed; 
     top: 0;
