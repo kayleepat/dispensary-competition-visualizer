@@ -51,12 +51,13 @@ d3.json(url).then(data => {
             
 
             if (distance_between_dispensaries <= radius) {
+
+                //increment competitors if the location is within the radius
                 competitors = competitors + 1
-                console.log('BBBBBBBBBBBBBBBBBBBBBB')
 
                 // #name, add, distance
                 table_data.push({
-                    'company name': data.features[i].properties.company
+                    'company_name': data.features[i].properties.company
                     ,'address': data.features[i].properties.full_address
                     ,'distance': distance_between_dispensaries
                     ,'competitors': competitors
@@ -70,6 +71,11 @@ d3.json(url).then(data => {
 
         console.log(`competitors within ${radius} miles = ${competitors}`)
         console.log(table_data)
+
+        // sort table data based on distance from selected location (high to low)
+        table_data.sort((a, b) => a.distance - b.distance);
+
+        update_table(table_data, competitors)
 
         return competitors
 
@@ -146,7 +152,8 @@ d3.json(url).then(data => {
                 return L.marker(coordinates, {
 
                     fillcolor: '#3388ff'
-
+                    
+                    
                 })
 
             }
@@ -158,11 +165,41 @@ d3.json(url).then(data => {
             console.log(`clicked coords = ${coords}`)
 
             main(radius = radius, coords = coords)
+
+            
     
         })
 
         map.addLayer(tile_layer)
         map.addLayer(data_layer)
+
+    }
+
+    function update_table(table_data, competitor_count){
+
+        //update competitor summary
+        d3.select('#competitor-count').innerHTML = competitor_count
+
+        //update main tale body
+        table_body = d3.select('tbody')
+
+        // clean up old table if needed
+        if(table_body != undefined){
+            table_body.selectAll('tr').remove()
+        }
+
+        //remove the first element of table data - it is the selected dispensary
+        //first element will always be self since the array is sorted high to low
+        // table_data = table_data.slice(1, table_data.length)
+
+        row_count = table_data.length
+
+        for(i=0; i<row_count; i++){
+            var row = table_body.append('tr')
+            var cell = row.append('td').text(table_data[i].company_name)
+            var cell = row.append('td').text(table_data[i].address)
+            var cell = row.append('td').text(`${Math.round(table_data[i].distance,0)} mi`)
+        }
 
     }
 
