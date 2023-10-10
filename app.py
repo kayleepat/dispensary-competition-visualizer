@@ -24,6 +24,10 @@ CORS(app)
 def index():
     return render_template("index.html")
 
+@app.route("/about")
+def about():
+    return render_template("about.html")
+
 @app.route("/api/v1.0/geoJSON")
 def geoJsonify():
     with engine.connect() as conn:
